@@ -32,7 +32,7 @@ const affichageCamera =  fetch ('http://localhost:3000/api/cameras/')
                 <div class="description">
                     <p><strong>Nom de la Caméra</strong>: ${idCameraSelectionnee.name}</p>
                     <p><strong>Description de la Caméra</strong>: ${idCameraSelectionnee.description}</p>
-                    <p><strong>Prix de la Caméra</strong>: ${idCameraSelectionnee.price/100}€</p>
+                    <p><strong>Prix de la Caméra</strong>: ${idCameraSelectionnee.price/100} €</p>
                 </div>
                 <form>
                     <label for="choix-lentilles"><strong>Lentilles:</strong></label>
@@ -44,6 +44,11 @@ const affichageCamera =  fetch ('http://localhost:3000/api/cameras/')
             </div>    
         </div>
     `
+
+    // Récupération de la classe pour mettre mon code HTML à l'intérieur
+    const ficheProduit = document.getElementById('PageProduit');
+    ficheProduit.innerHTML = structureCamera; // Pour l'affichage du produit final
+
     // Adapter le nombre de choix des lentilles en fonction du nombre de lentilles disponibles
     const quantiteLentilles = idCameraSelectionnee.lenses;
     // boucle for pour afficher toutes les lentilles disponibles
@@ -52,14 +57,9 @@ const affichageCamera =  fetch ('http://localhost:3000/api/cameras/')
         nombreLentilles = nombreLentilles +
         `
             <option value="${j}">${quantiteLentilles[j]}</option>
-           
         `
     }
-
-    // Récupération de la classe pour mettre mon code HTML à l'intérieur
-    const ficheProduit = document.getElementById('PageProduit');
-    ficheProduit.innerHTML = structureCamera; // Pour l'affichage du produit final
-
+    
     // Pour déterminer le nombre de choix de la lentille souhaitée
     const choixLentille = document.querySelector("#lenses");
     choixLentille.innerHTML = nombreLentilles; // OK bien inséré dans le code HTML
@@ -70,14 +70,44 @@ const affichageCamera =  fetch ('http://localhost:3000/api/cameras/')
         event.preventDefault();
         // Informations qui figureront sur la page du panier
         let detailsPanier = {
+            id: idCameraSelectionnee._id,
+            imageUrl: idCameraSelectionnee.imageUrl,
             name: idCameraSelectionnee.name,
             quantité:1,
-            prix: idCameraSelectionnee.price/100,
+            price: idCameraSelectionnee.price/100,
         }
         console.log(detailsPanier);
-    });
-})
+        
+        // Préparation de la page panier avec le local storage une fois qu'on appuie sur "ajouter au panier"
+        // Déclaration de la variable "produitEnregistreDansLocalStorage" dans lequel on met la clé dans le local storage
+        let produitEnregistreDansLocalStorage = JSON.parse(localStorage.getItem("camera"));
+        // Conversion des données dans le local storage au format json en format javascript
 
+         // Alerte récapitulatif panier
+         const votrePanier = () => {
+            if(window.confirm('La caméra sélectionnée a bien été ajoutée dans votre panier. Pour Voir votre panier OK ou ANNULER pour revenir vers Accueil')){
+            window.location.href = "panier.html";
+            }else{
+                window.location.href = "index.html";
+            }
+        }
+        //Fonction ajouter une caméra sélectionnée dans le local storage
+        const ajoutCameraLocalStorage = () => {
+            produitEnregistreDansLocalStorage.push(detailsPanier); // Mettre les values detaillées présents dans detailsPanier
+            localStorage.setItem("camera", JSON.stringify(produitEnregistreDansLocalStorage)); // transformation au format json et l'envoyer dans la clé du local storage
+        };
+        // Deux conditions: s'il y a des produits enregistrés dans le local storage et le contraire avec else
+        if (produitEnregistreDansLocalStorage){
+            ajoutCameraLocalStorage();
+            votrePanier();
+        }
+        else{
+            produitEnregistreDansLocalStorage = [];
+            ajoutCameraLocalStorage();
+            votrePanier();
+        }
+    })
+})   
 
 
 
