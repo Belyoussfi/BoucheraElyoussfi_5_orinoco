@@ -159,13 +159,13 @@ select {
     flex-direction: column;
     border-radius: 2em;
     margin: 4em 2.5em 0 2.5em;
+    border: solid blue 2px;
 }
 
 .contenu{
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    border-bottom: burlywood solid 2px;
     padding: 2em 0;
 }
 
@@ -191,4 +191,55 @@ select {
     font-weight: bold;
     color: burlywood;
     text-align: center;
+}
+
+.prix-total{
+    text-align: center;
+}
+
+#formulaire-commande{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+label{
+    margin-bottom: 0.5em;
+    font-weight: bold;
+    border-bottom: solid 2px black;
+    font-size: 1.1em;
+}
+
+input, textarea{
+    margin-bottom: 2em;
+    border: none;
+    outline: none;
+    padding: 0.4em;
+    background-color: burlywood;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2em;
+    width: 350px;
+}
+
+.envoyer-commande{
+    background-color: burlywood;
+    color: white;
+    font-weight: bold;
+    font-size: 1.1em;
+    border: none;
+    border-radius: 2em;
+    padding: 1.2em;
+    width: 250px;
+}
+
+.panier-name{
+    width: 150px;
 }
