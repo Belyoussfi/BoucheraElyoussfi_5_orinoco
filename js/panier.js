@@ -1,6 +1,4 @@
-
-
-// Déclaration de la variable "produitEnregistreDansLocalStorage" dans lequel on met la clé dans le local storage
+// Déclaration de la variable "produitEnregistreDansLocalStorage" dans lequel on met la clé dans le localstorage
 let produitEnregistreDansLocalStorage = JSON.parse(localStorage.getItem("camera"));
 // Conversion des données dans le local storage au format json en format javascript
 //console.log(produitEnregistreDansLocalStorage);
@@ -86,19 +84,19 @@ if(produitEnregistreDansLocalStorage === null || produitEnregistreDansLocalStora
                 <h2>Valider la commande en remplissant le formulaire</h2>
                 <form method="#" action= "#"  name="validation" >
                     <label for="nom">Nom* :</label>
-                    <input type="text" id ="nom"  name="nom" >
+                    <input type="text" id ="lastName"  name="lastName" >
             
                     <label for="prénom">Prénom* :</label>
-                    <input type="text" id ="prenom" name="prenom" >
+                    <input type="text" id ="firstName" name="firstName" >
             
                     <label for="email">E-mail* :</label>
                     <input type="text" id="email" name="email" >
 
                     <label for="adresse">Adresse* :</label>
-                    <input id ="adresse" name="adresse" maxlength = 50 ></input>
+                    <input id ="adress" name="adress" maxlength = 50 ></input>
 
                     <label for="ville">Ville* :</label>
-                    <input type="text" id="ville" name="ville" >
+                    <input type="text" id="city" name="city" >
 
                     <p style="color:red;" id="erreur"></p>
             
@@ -114,8 +112,8 @@ if(produitEnregistreDansLocalStorage === null || produitEnregistreDansLocalStora
     // Gestion du formulaire
     const btnValidationFormulaire = document.querySelector("#envoyerCommande");
 
-    btnValidationFormulaire.addEventListener("click", function (event) {
-        event.preventDefault();
+    btnValidationFormulaire.addEventListener("click", function (e) {
+        e.preventDefault();
         const validationFormulaire = true;
         let erreur;
         const inputs = document.getElementsByTagName("input");
@@ -134,16 +132,16 @@ if(produitEnregistreDansLocalStorage === null || produitEnregistreDansLocalStora
         };
 
         // Gestion des RegEx selon les différentes values du formulaire: Ex: pas de chiffres dans la ville
-        nom = validation.nom.value;
-        regExpNom = /^[a-zA-Z\s]{3,10}$/;
-        if(regExpNom.test(nom)==false){
+        lastName = validation.lastName.value;
+        regExpLastName = /^[a-zA-Z\s]{3,10}$/;
+        if(regExpLastName.test(lastName)==false){
             alert("NOM: Seuls les lettres en majuscules et minuscules sont acceptées. 3 caractères minimum");
             return false;
         }
         // RegEx pour le champ prenom
-        prenom = validation.prenom.value;
-        regExPrenom = /^[a-zA-Z\s]{3,10}$/;
-        if(regExPrenom.test(prenom) ==false){
+        firstName = validation.firstName.value;
+        regExFirstName = /^[a-zA-Z\s]{3,10}$/;
+        if(regExFirstName.test(firstName) ==false){
             alert("PRENOM: Les caractères spéciaux et les chiffres ne sont pas acceptés.");
             return false;
         }
@@ -155,16 +153,16 @@ if(produitEnregistreDansLocalStorage === null || produitEnregistreDansLocalStora
             return false;
         }
         // RegEx du champ adresse
-        adresse = validation.adresse.value;
-        regExAdresse = /^[a-zA-Z0-9\s]{5,25}$/;
-        if(regExAdresse.test(adresse) ==false){
+        adress = validation.adress.value;
+        regExAdress = /^[a-zA-Z0-9\s]{10,25}$/;
+        if(regExAdress.test(adress) ==false){
             alert("ADRESSSE: Minimum de 5 caractères demandés.");
             return false;
         }
         // RegEx du champ ville
-        ville = validation.ville.value;
-        regExVille = /^[a-zA-Z\s]{5,15}$/;
-        if(regExVille.test(ville) ==false){
+        city = validation.city.value;
+        regExCity = /^[a-zA-Z\s]{5,15}$/;
+        if(regExCity.test(city) ==false){
             alert("VILLE: Les chiffres ne sont pas autorisés. Minimum 5 caractères.");
             return false;
         }
@@ -175,85 +173,135 @@ if(produitEnregistreDansLocalStorage === null || produitEnregistreDansLocalStora
             e.preventDefault();
             alert("formulaire non envoyé");
         }
+    /*
+    //Création de l'objet "contact"
+    let contact = {
+        lastName: document.querySelector("#lastName").value,
+        firstName: document.querySelector("#firstName").value,
+        email: document.querySelector("#email").value,
+        adress: document.querySelector("#adress").value,
+        city: document.querySelector("#city").value,
+    }
+    console.log(contact);
+    */
 
-        formulaireValues = {
-            nom: document.querySelector("#nom").value,
-            prenom: document.querySelector("#prenom").value,
+    // création du tableau products (id des caméras du panier)
+    console.log(produitEnregistreDansLocalStorage);
+      let products = [];
+      for (product of produitEnregistreDansLocalStorage) {
+          let productsId = product.id;
+          products.push((productsId));
+      }
+      
+
+      /*
+
+      const products = Object.values(Cart.products).map((produitEnregistreDansLocalStorage) => {
+        return produitEnregistreDansLocalStorage.id
+      })
+    */
+      const order = {
+        contact: {
+            lastName: document.querySelector("#lastName").value,
+            firstName: document.querySelector("#firstName").value,
             email: document.querySelector("#email").value,
-            adresse: document.querySelector("#adresse").value,
-            ville: document.querySelector("#ville").value,
-        }
-
-        const donneesEnvoyees = {
-            formulaireValues,
-            produitEnregistreDansLocalStorage,
-        };
+            adress: document.querySelector("#adress").value,
+            city: document.querySelector("#city").value,
+        },
+        products: products,
+      }
         
-        /*fetch("http://localhost:3000/api/cameras/order", {         
-            method: "POST",            
-            body: JSON.stringify(donneesEnvoyees),            
-            headers: {               
-                "Content-type": "application/json"         
-            }       
-        })       
-        .then(window.location.href = "confirmation.html")      
-        .then(json.ok = console.log(json))    
-        .catch(err => console.log(err)); 
-        */
-       /* fetch("http://localhost:3000/api/cameras/order", {
-        method: 'post',
-        body: '',
-        headers: {
-            'Content-Type': 'application/json'
-          },
     
-      }).then(function(response) {
-        //return response.json();
-        console.log(response)
-      }).then(function(data) {
-        console.log(data)
-      });
-      */
+      
+    
+    //création d'un objet regroupant contact et produits
+    const donneesEnvoyees = {
+        order,
+        products,
+    }
 
-      /*let fd = new FormData();
-        let {user} = this.state.user;
-        for (let prop in user) {
-        fd.append(prop, JSON.stringify(user[prop]));
-     }
-     */
+    console.log(donneesEnvoyees);
+
+                
+    
+
+    const requestOptions = {
+        method: 'POST',
+        body: JSON.stringify(donneesEnvoyees),
+        headers: { 
+            'Content-Type': 'application/json; charset=utf-8',
+            'Access-Control-Allow-Origin': '*',
+        },
+      }
 
       
-     let json = JSON.stringify(donneesEnvoyees);
-
-     fetch ("http://localhost:3000/api/cameras/order", {         
-        method: "POST",            
-        body: json,            
-        headers: {               
-            "Content-type": "application/json"         
-        }       
-    })        
-     .then(function(response){
-         if (response.ok){
-            return response.json()
-        }
-     })
-     .then (function(data){
-         console.log(data)
-     });
-    
-    
-
-
-        
        
+      
+      /*
+      .then((response) => response.json())
+        .then((json) => {
+          console.log(json)
+     })
+     */
+     /*
+      fetch(`http://localhost:3000/api/cameras/order`, requestOptions)
+        .then((response) => response.json())
+        .then((json) => {
+          console.log(json)
+          //localStorage.removeItem('shoppingCart')
+          //window.location.href = `${window.location.origin}/orderStatus.html?orderId=${json.orderId}`
+        })
+       */ 
     
-        
-    });
+
+        //Requête POST pour envoyer l'objet Contact et le tableau products à l'API
+
+    
+  
+                   
+    
+
+          
+
+     
+            
+           
+
+        });
+
+    
+
+       
+
+
+    
+
+   
+
+            
+
+
+
+
+
+
+
+
+    
+   
+
+
+    
+
+
+    
+
 
    
     
   
-
+    
+     
     
     
 
