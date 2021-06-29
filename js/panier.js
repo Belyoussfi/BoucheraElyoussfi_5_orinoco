@@ -112,7 +112,7 @@ if(produitEnregistreDansLocalStorage === null || produitEnregistreDansLocalStora
     // Gestion du formulaire
     const btnValidationFormulaire = document.querySelector("#envoyerCommande");
 
-    btnValidationFormulaire.addEventListener("click", function (e) {
+    btnValidationFormulaire.addEventListener("click", (e) => {
         e.preventDefault();
         const validationFormulaire = true;
         let erreur;
@@ -173,103 +173,82 @@ if(produitEnregistreDansLocalStorage === null || produitEnregistreDansLocalStora
             e.preventDefault();
             alert("formulaire non envoyé");
         }
-    /*
+    
     //Création de l'objet "contact"
+    
     let contact = {
-        lastName: document.querySelector("#lastName").value,
-        firstName: document.querySelector("#firstName").value,
-        email: document.querySelector("#email").value,
-        adress: document.querySelector("#adress").value,
-        city: document.querySelector("#city").value,
+        firstName : document.querySelector("#firstName").value,
+        lastName : document.querySelector("#lastName").value,
+        address : document.querySelector("#adress").value,
+        city : document.querySelector("#city").value,
+        email : document.querySelector("#email").value,
     }
     console.log(contact);
-    */
 
     // création du tableau products (id des caméras du panier)
-    console.log(produitEnregistreDansLocalStorage);
+    
+    
       let products = [];
       for (product of produitEnregistreDansLocalStorage) {
-          let productsId = product.id;
+          let productsId = product;
           products.push((productsId));
-      }
-      
-
+        }
+    
       /*
 
       const products = Object.values(Cart.products).map((produitEnregistreDansLocalStorage) => {
         return produitEnregistreDansLocalStorage.id
       })
     */
-      const order = {
-        contact: {
-            lastName: document.querySelector("#lastName").value,
-            firstName: document.querySelector("#firstName").value,
-            email: document.querySelector("#email").value,
-            adress: document.querySelector("#adress").value,
-            city: document.querySelector("#city").value,
-        },
-        products: products,
-      }
-        
-    
-      
-    
-    //création d'un objet regroupant contact et produits
-    const donneesEnvoyees = {
-        order,
+   
+    const order = {
+        contact,
         products,
+    }    
+
+       console.log(order) ;
+
+     /* 
+    const post = fetch ("http://localhost:3000/api/cameras/order",{
+        method: "POST",
+        body: JSON.stringify(order),
+        headers:{
+            "Content-type": "application/json",
+        }
+    });
+    */
+
+    const url = `http://localhost:3000/api/cameras/order`
+ const options = {
+  method: 'POST',
+  body: JSON.stringify(order),
+  headers: {
+    "Content-type": "application/json",
+  }
+ }
+
+ return fetch(url, options)
+ .then(function(response){
+     console.log(response);
+    if (response.ok){
+        return response.json()
     }
-
-    console.log(donneesEnvoyees);
-
-                
-    
-
-    const requestOptions = {
-        method: 'POST',
-        body: JSON.stringify(donneesEnvoyees),
-        headers: { 
-            'Content-Type': 'application/json; charset=utf-8',
-            'Access-Control-Allow-Origin': '*',
-        },
-      }
-
-      
-       
-      
-      /*
-      .then((response) => response.json())
-        .then((json) => {
-          console.log(json)
-     })
-     */
-     /*
-      fetch(`http://localhost:3000/api/cameras/order`, requestOptions)
-        .then((response) => response.json())
-        .then((json) => {
-          console.log(json)
-          //localStorage.removeItem('shoppingCart')
-          //window.location.href = `${window.location.origin}/orderStatus.html?orderId=${json.orderId}`
-        })
-       */ 
-    
-
-        //Requête POST pour envoyer l'objet Contact et le tableau products à l'API
-
-    
+});
   
-                   
-    
 
-          
 
-     
+                    
             
-           
-
-        });
-
     
+    
+
+      
+
+        
+
+    });
+
+ 
 
        
 
