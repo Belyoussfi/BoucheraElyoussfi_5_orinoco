@@ -47,7 +47,7 @@ exports.getOneCamera = (req, res, next) => {
  *
  */
 exports.orderCameras = (req, res, next) => {
- /* if (!req.body.contact ||
+  if (!req.body.contact ||
       !req.body.contact.firstName ||
       !req.body.contact.lastName ||
       !req.body.contact.address ||
@@ -55,8 +55,9 @@ exports.orderCameras = (req, res, next) => {
       !req.body.contact.email ||
       !req.body.products) {
     return res.status(400).send(new Error('Bad request!'));
-  }*/
-  console.log("test");
+  }
+  
+  
   let queries = [];
   for (let productId of req.body.products) {
     const queryPromise = new Promise((resolve, reject) => {

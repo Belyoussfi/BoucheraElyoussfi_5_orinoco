@@ -74,6 +74,8 @@ if(produitEnregistreDansLocalStorage === null || produitEnregistreDansLocalStora
     cameraPanier.insertAdjacentHTML("beforeend", affichagePrixTotal);
     console.log(affichagePrixTotal);
 
+    localStorage.setItem("prixTotal", JSON.stringify(prixTotal));
+
     // Formulaire de Commande
 
     const afficherFormulaireHtml = () => {
@@ -82,7 +84,7 @@ if(produitEnregistreDansLocalStorage === null || produitEnregistreDansLocalStora
         const formulaireHtml = `
             <div id="formulaire-commande">
                 <h2>Valider la commande en remplissant le formulaire</h2>
-                <form method="#" action= "#"  name="validation" >
+                <form method="post" action= "http://localhost:3000/api/cameras"  name="validation" >
                     <label for="nom">Nom* :</label>
                     <input type="text" id ="lastName"  name="lastName" >
             
@@ -156,7 +158,7 @@ if(produitEnregistreDansLocalStorage === null || produitEnregistreDansLocalStora
         adress = validation.adress.value;
         regExAdress = /^[a-zA-Z0-9\s]{10,25}$/;
         if(regExAdress.test(adress) ==false){
-            alert("ADRESSSE: Minimum de 5 caractères demandés.");
+            alert("ADRESSSE: Minimum de 10 caractères demandés.");
             return false;
         }
         // RegEx du champ ville
@@ -173,81 +175,37 @@ if(produitEnregistreDansLocalStorage === null || produitEnregistreDansLocalStora
             e.preventDefault();
             alert("formulaire non envoyé");
         }
-    
-    //Création de l'objet "contact"
-    
-    let contact = {
-        firstName : document.querySelector("#firstName").value,
-        lastName : document.querySelector("#lastName").value,
-        address : document.querySelector("#adress").value,
-        city : document.querySelector("#city").value,
-        email : document.querySelector("#email").value,
-    }
-    console.log(contact);
-
-    // création du tableau products (id des caméras du panier)
-    
-    
-      let products = [];
-      for (product of produitEnregistreDansLocalStorage) {
-          let productsId = product;
-          products.push((productsId));
-        }
-    
-      /*
-
-      const products = Object.values(Cart.products).map((produitEnregistreDansLocalStorage) => {
-        return produitEnregistreDansLocalStorage.id
-      })
-    */
-   
-    const order = {
-        contact,
-        products,
-    }    
-
-       console.log(order) ;
-
-     /* 
-    const post = fetch ("http://localhost:3000/api/cameras/order",{
-        method: "POST",
-        body: JSON.stringify(order),
-        headers:{
-            "Content-type": "application/json",
-        }
-    });
-    */
-
-    const url = `http://localhost:3000/api/cameras/order`
- const options = {
-  method: 'POST',
-  body: JSON.stringify(order),
-  headers: {
-    "Content-type": "application/json",
-  }
- }
-
- return fetch(url, options)
- .then(function(response){
-     console.log(response);
-    if (response.ok){
-        return response.json()
-    }
-});
-  
-
-
-                    
-            
-    
-    
-
-      
-
         
+        /* Tableau produit à envoyer vers le serveur */
+        let products = [];
+        for (product of produitEnregistreDansLocalStorage) {
+            products.push(product.id);
+        }
 
-    });
-
+        /* Objet contact à envoyer vers le serveur */
+        let contact = {
+            firstName : document.querySelector("#firstName").value,
+            lastName : document.querySelector("#lastName").value,
+            address : document.querySelector("#adress").value,
+            city : document.querySelector("#city").value,
+            email : document.querySelector("#email").value,
+        };
+        
+        /* Requête POST pour envoyer les produits + contact vers le serveur */
+        fetch("http://localhost:3000/api/cameras/order", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify({contact, products, prixTotal}),
+        })
+        .then((response) => response.json())
+        .then((response) => {
+            localStorage.setItem("orderId", response.orderId);
+            console.log(response.orderId);
+            window.location = "confirmation.html";
+        })
+    })
  
 
        

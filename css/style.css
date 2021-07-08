@@ -270,17 +270,18 @@ button{
     width: 150px;
 }
 
-.confirmation{ /* page de confirmation */
+.bold{
+    font-weight: bold;
+    font-style: italic;
+    color: blue;
+}
+
+#confirmation{ /* page de confirmation */
     text-align: center;
     margin: 5em 0 12em 0;
 }
 
-.confirmation h2{
-    font-size: 1.4em;
-    margin-bottom: 2em;
-}
-
-.confirmation p{
+#confirmation p{
     font-size: 1.2em;
     margin-top: 1.3em;
 }
